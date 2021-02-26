@@ -1,0 +1,152 @@
+version: "2.0"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - mood_great
+  - mood_unhappy
+  - bot_challenge
+  - leave_balance
+  - salary_issue
+  - harrasment
+  - resign
+
+responses:
+  utter_greet:
+  - text: "Hey! How are you?"
+
+  utter_cheer_up:
+  - text: "Here is something to cheer you up:"
+    image: "https://i.imgur.com/nGF1K8f.jpg"
+
+  utter_did_that_help:
+  - text: "Did that help you?"
+
+  utter_happy:
+  - text: "Great, carry on!"
+
+  utter_goodbye:
+  - text: "Bye"
+
+  utter_iamabot:
+  - text: "I am a bot, powered by Rasa."
+
+  utter_leave_balance:
+  - text: "Your remaining leaves -"
+
+  utter_salary:
+  - text: "Issue regarding salary is sent. We will verify and solve it as soon as possible "
+
+  utter_harrasment:
+  - text: "Your compliant has been filed. And quick action will be taken "
+
+  utter_resign:
+  - text: "Your request has been sent . We will reach you as soon as possible"
+  utter_submit:
+  - text: YOUR  REQUEST HAS BEEN SENT . WE WILL REACH YOU AS SOON AS POSSIBLE
+  - text: THANK YOU FOR CONTACTING US . WE WILL SOON RESOLVE THE ISSUE
+  utter_take_time:
+  - text: PLEASE TAKE SOME TIME AND BEFORE YOU MAKE ANY DECISION
+  utter_ask_SALARY_ISSUE:
+  - text: PLEASE STATE YOUR SALARY ISSUE
+
+
+  utter_ask_ISSUE_DISCRIPTION:
+  - text: HARRASMENT ISSUE
+  utter_ask_NAME_ACCUSED:
+  - text: NAME OF ACCUSED
+  utter_ask_ID_ACCUSED:
+  - text: ID OF ACCUSED
+
+
+  utter_ask_WHY_DO_YOU_WANT_TO_LEAVE:
+  - text: WHY DO YOU WANT TO LEAVE
+  utter_ask_IS_THERE_ANYTHING_WE_CAN_SO_THAT_YOU_STAY:
+  - text: IS THERE ANYTHING WE CAN DO , SO THAT YOU STAY
+  utter_ask_id:
+  - text: "Enter your ID"
+  utter_ask_password:
+  - text: "Enter your password"
+  utter_restart:
+  - text: sessioning
+
+
+slots:
+  SALARY_ISSUE:
+    type: text
+    influence_conversation: true
+
+  ISSUE_DISCRIPTION:
+    type: text
+    influence_conversation: true
+  NAME_ACCUSED:
+    type: text
+    influence_conversation: true
+  ID_ACCUSED:
+    type: text
+    influence_conversation: true
+  id:
+    type: text
+    influence_conversation: true
+  password:
+    type: text
+    influence_conversation: true
+
+  WHY_DO_YOU_WANT_TO_LEAVE:
+    type: text
+    influence_conversation: true
+  IS_THERE_ANYTHING_WE_CAN_SO_THAT_YOU_STAY:
+    type: text
+    influence_conversation: true
+  authenticate: 
+    type: text
+    influence_conversation: true
+  dummy: 
+    type: text
+    influence_conversation: true
+
+  
+actions:
+- action_leave_balance
+- action_salary_issue
+- action_harrasment
+- validate_greet
+- validate_salary_issue
+- validate_harrasment
+- validate_resign
+
+forms:
+  salary_issue:
+    SALARY_ISSUE:
+    - type: from_text
+
+  harrasment:
+    NAME_ACCUSED:
+    - type: from_text
+    ISSUE_DISCRIPTION:
+    - type: from_text
+
+
+
+  resign:
+    WHY_DO_YOU_WANT_TO_LEAVE:
+    - type: from_text
+    IS_THERE_ANYTHING_WE_CAN_SO_THAT_YOU_STAY:
+    - type: from_text
+  
+  greet:
+    id:
+    - type: from_text
+    password:
+    - type: from_text
+
+
+
+
+  
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

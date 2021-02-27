@@ -1,0 +1,100 @@
+version: "2.0"
+
+rules:
+
+# - rule: Say goodbye anytime the user says goodbye
+#   steps:
+#   - intent: goodbye
+#   - action: utter_goodbye
+
+# - rule: Say 'I am a bot' anytime the user challenges
+#   steps:
+#   - intent: bot_challenge
+#   - action: utter_iamabot
+
+
+# rules:
+- rule: Activate form for salary_issue
+  steps:
+  - intent: salary_issue
+  - action: salary_issue
+  - active_loop: salary_issue
+
+- rule: Submit form
+  condition:
+  # Condition that form is active.
+  - active_loop: salary_issue
+  steps:
+  # Form is deactivated
+  - action: salary_issue
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  # The actions we want to run when the form is submitted.
+  # - action: utter_submit
+  # - action: utter_slots_values
+
+    #harrasment rule
+    
+- rule: Activate form for harrasment
+  steps:
+  - intent: harrasment
+  - action: harrasment
+  - active_loop: harrasment
+
+- rule: Submit form
+  condition:
+  # Condition that form is active.
+  - active_loop: harrasment
+  steps:
+  # Form is deactivated
+  - action: harrasment
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  # The actions we want to run when the form is submitted.
+  # - action: action_harrasment
+  # - action: utter_slots_values
+
+- rule: Activate form for resign
+  steps:
+  - intent: resign
+  - action: resign
+  - active_loop: resign
+
+- rule: Submit form
+  condition:
+  # Condition that form is active.
+  - active_loop: resign
+  steps:
+  # Form is deactivated
+  - action: resign
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  # The actions we want to run when the form is submitted.
+  # - action: utter_take_time
+  # - action: action_resign
+  # - action: utter_slots_values
+
+
+- rule: Activate form for greet
+  steps:
+  - intent: greet
+  - action: greet
+  - active_loop: greet
+
+- rule: Submit form
+  condition:
+  # Condition that form is active.
+  - active_loop: greet
+  steps:
+  # Form is deactivated
+  - action: greet
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: action_takeup
+  # The actions we want to run when the form is submitted.
+  # - action: utter_login
+  # - action: utter_slots_values

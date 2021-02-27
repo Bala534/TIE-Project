@@ -1,0 +1,33 @@
+version: "2.0"
+
+stories:
+
+
+
+- story: leave balance
+  steps:
+  - intent: leave_balance
+  - action: action_leave_balance
+
+- story: greet
+  steps:
+  - or:
+    - intent: greet1
+    - intent: imfine
+    - intent: wtbtu
+    - intent: nice2meet
+    - intent: wtdoudo
+    - intent: goodbye
+  - action: action_sollu
+
+#- story: salary issues
+#  steps:
+# - intent: salary_issue
+# - action: action_salary_issue
+
+# - story: harrasement case
+#   steps:
+#   - intent: harrasment
+#   - action: action_harrasment
+
+

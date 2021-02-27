@@ -8,31 +8,18 @@
 # This is a simple example for a custom action which utters "Hello World!"
 import json
 from typing import Any, Text, Dict, List
-
 from rasa_sdk import Action, Tracker, FormValidationAction
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import SlotSet, FollowupAction
 from rasa_sdk.types import DomainDict
 import random
 import requests
-#
 
-url = "https://53be12badfe4.ngrok.io/"
 
-#
-# class ActionHelloWorld(Action):
-#
-#     def name(self) -> Text:
-#         return "action_hello_world"
-#
-#     def run(self, dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-#
-#         dispatcher.utter_message(text="Hello World!")
-#
-#         return []
 
+
+url = "https://3e80363e678f.ngrok.io/"    #Don't forget to add / after io 
+latest = None
 
 
 class ButtonsFactory:
@@ -57,9 +44,10 @@ class ActionLeaveBalance(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
+        global latest
         authenticate = tracker.get_slot("authenticate")
         if authenticate is None:
+            latest = "action_leave_balance"
             dispatcher.utter_message(text = f"you have not logged in. Please login and try again", buttons = ButtonsFactory.createButtons(list_of_possibles = ['Login'], intent = "greet", slot_name = "dummy"))
         else:
             id = tracker.get_slot("id")
@@ -121,11 +109,13 @@ class ActionSalaryIssue(FormValidationAction):
         dispatcher: CollectingDispatcher,
         tracker: Tracker,
         domain: DomainDict,) -> Dict[Text, Any]:
-        print(1)
+        # print(1)
+        global latest
         authenticate = tracker.get_slot("authenticate")
         if authenticate is None:
             print("sending to authenticate")
-            dispatcher.utter_message(text = f"you have not logged in. Please login and try again")
+            latest = "salary_issue"
+            dispatcher.utter_message(text = f"you have not logged in. Please login and try again", buttons = ButtonsFactory.createButtons(list_of_possibles = ["Login"], intent = "greet", slot_name = "dummy"))
             return [FollowupAction("greet")]
         else:
             id = tracker.get_slot("id")
@@ -153,34 +143,36 @@ class ActionHarrasment(FormValidationAction):
         dispatcher: CollectingDispatcher,
         tracker: Tracker,
         domain: DomainDict,) -> Dict[Text, Any]:
-
-        authenticate = tracker.get_slot("authenticate")
-        if authenticate is None:
-            dispatcher.utter_message(text = f"you have not logged in. Please login and try again")
-            return [FollowupAction("greet")]
-        else:
-            d = {"NAME_ACCUSED": slot_value}
-            return d
+        global latest
+        latest = "harrasment"
+        d = {"NAME_ACCUSED": slot_value}
+        return d
 
     def validate_ISSUE_DISCRIPTION(self,
         slot_value: Any,
         dispatcher: CollectingDispatcher,
         tracker: Tracker,
         domain: DomainDict,) -> Dict[Text, Any]:
+        authenticate = tracker.get_slot("authenticate")
         id = tracker.get_slot("id")
         issue = tracker.get_slot("ISSUE_DISCRIPTION")
         accused = tracker.get_slot("NAME_ACCUSED")
-
-        data = {
-            "id1" : int(id),
-            "case" : issue,
-            "id2" : accused
-        }
-        with open("data.json", "w") as f:
-                json.dump(data, f)
-        response = requests.post(url = url+"harassment", params = data)
-            
-        dispatcher.utter_message(text=f"{response.text}")
+        global latest
+        if authenticate is None:
+            latest = "harrasment"
+            dispatcher.utter_message(text = f"you have not logged in. Please login and try again" , buttons = ButtonsFactory.createButtons(list_of_possibles = ["Login"], intent = "greet", slot_name = "dummy"))
+            return [FollowupAction("greet")]
+        else:
+            data = {
+                "id1" : int(id),
+                "case" : issue,
+                "id2" : accused
+            }
+            with open("data.json", "w") as f:
+                    json.dump(data, f)
+            response = requests.post(url = url+"harassment", params = data)
+                
+            dispatcher.utter_message(text=f"{response.text}")
 
 
 
@@ -197,15 +189,9 @@ class ActionResignation(FormValidationAction):
         dispatcher: CollectingDispatcher,
         tracker: Tracker,
         domain: DomainDict,) -> Dict[Text, Any]:
+        global latest
+        latest = "resign"
 
-        authenticate = tracker.get_slot("authenticate")
-        if authenticate is None:
-            dispatcher.utter_message(text = f"you have not logged in. Please login and try again")
-            return [FollowupAction("greet")]
-        else:
-            d = {"NAME_ACCUSED": slot_value}
-            return d
-    
     def validate_IS_THERE_ANYTHING_WE_CAN_SO_THAT_YOU_STAY(self,
         slot_value: Any,
         dispatcher: CollectingDispatcher,
@@ -214,17 +200,51 @@ class ActionResignation(FormValidationAction):
         id = tracker.get_slot("id")
         issue = tracker.get_slot("WHY_DO_YOU_WANT_TO_LEAVE")
         korika = tracker.get_slot("IS_THERE_ANYTHING_WE_CAN_SO_THAT_YOU_STAY")
+        authenticate = tracker.get_slot("authenticate")
+        if authenticate is None:
 
-        data = {
-            "id1" : int(id),
-            "resignissue" : issue,
-            "block" : korika
-        }
-        with open("data.json", "w") as f:
-                json.dump(data, f)
-        response = requests.post(url = url+"resignation", params = data)
-            
-        dispatcher.utter_message(text=f"{response.text}")
+            dispatcher.utter_message(text = f"you have not logged in. Please login and try again", buttons = ButtonsFactory.createButtons(list_of_possibles = ["Login"], intent = "greet", slot_name = "dummy"))
+            return [FollowupAction("greet")]
+        else:
+            data = {
+                "id1" : int(id),
+                "resignissue" : issue,
+                "block" : korika
+            }
+            with open("data.json", "w") as f:
+                    json.dump(data, f)
+            response = requests.post(url = url+"resignation", params = data)
+                
+            dispatcher.utter_message(text=f"{response.text}")
+
+#################################################################################################
 
 
+class ActionSollu(Action):
 
+    def name(self) -> Text:
+        return "action_sollu"
+    
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        intent_ = tracker.get_intent_of_latest_message()
+        dispatcher.utter_message(template = f"utter_{intent_}")
+
+        return []
+
+#####################################################################################
+
+
+class ActionTakeUp(Action):
+
+    def name(self) -> Text:
+        return "action_takeup"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        if latest is not  None:
+            print("lstest issue", latest)
+            return [FollowupAction(latest)]

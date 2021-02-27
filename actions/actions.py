@@ -19,7 +19,7 @@ import requests
 
 
 url = "https://3e80363e678f.ngrok.io/"    #Don't forget to add / after io 
-latest = None
+# latest = None
 
 
 class ButtonsFactory:
@@ -44,10 +44,9 @@ class ActionLeaveBalance(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        global latest
         authenticate = tracker.get_slot("authenticate")
         if authenticate is None:
-            latest = "action_leave_balance"
+            # latest = "action_leave_balance"
             dispatcher.utter_message(text = f"you have not logged in. Please login and try again", buttons = ButtonsFactory.createButtons(list_of_possibles = ['Login'], intent = "greet", slot_name = "dummy"))
         else:
             id = tracker.get_slot("id")
@@ -56,6 +55,7 @@ class ActionLeaveBalance(Action):
                 json.dump(data, f)
             response = requests.post(url = url+"leavebalance", params = data)
             dispatcher.utter_message(text=f"Your remaining leaves {response.text}")
+        return [SlotSet("latest","action_leave_balance")]
 
 
 #################################################################################################
@@ -83,17 +83,18 @@ class ActionLogin(FormValidationAction):
         print(data)
         response = requests.post(url = url, params = data)
         print(response.text)
-        dispatcher.utter_message(text="YOU HAVE LOGGED IN SUCCESSFULLY")
         if response.text == "OK":
             d = {}
             d['id'] = id
             d['password'] = password
             d['authenticate']=1
+            dispatcher.utter_message(text="YOU HAVE LOGGED IN SUCCESSFULLY")
             return d
         else:
             d = {}
             d['id'] = None
             d['password'] = None
+            dispatcher.utter_message(text = "Please check your ID and Password")
         return d
 
 
@@ -128,7 +129,7 @@ class ActionSalaryIssue(FormValidationAction):
             
             dispatcher.utter_message(text=f"{response.text}")
             print(issue)
-        return []
+        return [SlotSet("latest","action_leave_balance")]
 
 
 ##############################################################################################################################
@@ -157,7 +158,6 @@ class ActionHarrasment(FormValidationAction):
         id = tracker.get_slot("id")
         issue = tracker.get_slot("ISSUE_DISCRIPTION")
         accused = tracker.get_slot("NAME_ACCUSED")
-        global latest
         if authenticate is None:
             latest = "harrasment"
             dispatcher.utter_message(text = f"you have not logged in. Please login and try again" , buttons = ButtonsFactory.createButtons(list_of_possibles = ["Login"], intent = "greet", slot_name = "dummy"))
@@ -173,6 +173,7 @@ class ActionHarrasment(FormValidationAction):
             response = requests.post(url = url+"harassment", params = data)
                 
             dispatcher.utter_message(text=f"{response.text}")
+        return [SlotSet("latest","action_leave_balance")]
 
 
 
@@ -191,6 +192,7 @@ class ActionResignation(FormValidationAction):
         domain: DomainDict,) -> Dict[Text, Any]:
         global latest
         latest = "resign"
+        return [SlotSet("latest","action_leave_balance")]
 
     def validate_IS_THERE_ANYTHING_WE_CAN_SO_THAT_YOU_STAY(self,
         slot_value: Any,
@@ -244,7 +246,7 @@ class ActionTakeUp(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        
-        if latest is not  None:
+        latest = tracker.get_slot("latest")
+        if  latest is not  None:
             print("lstest issue", latest)
             return [FollowupAction(latest)]

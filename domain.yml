@@ -2,6 +2,10 @@ version: "2.0"
 
 intents:
   - greet
+  - greet1
+  - imfine
+  - wtbtu
+  - wtdoudo
   - goodbye
   - affirm
   - deny
@@ -12,10 +16,37 @@ intents:
   - salary_issue
   - harrasment
   - resign
+  - nice2meet
 
 responses:
-  utter_greet:
+  utter_greet1:
   - text: "Hey! How are you?"
+  - text: "Hey there,How are you?"
+  - text: "Hello! How is all going on?"
+  - text: "Good to hear from you. How are things going on?"
+
+  utter_imfine:
+  - text: "Excellent!"
+  - text: "Good to hear from you."
+  - text: "What can i do for you."
+
+  utter_wtbtu:
+  - text: " I'm fine. Thanks for the concern"
+  - text: "I'm good. Thanks for asking"
+  - text: "I'm fine. Thank You"
+
+  utter_nice2meet:
+  - text: "Nice to meet you too. "
+  - text: "Good to meet you. "
+  - text: "Pleasure to meet you. "
+
+  utter_wtdoudo:
+  - text: " I can provide following services  \n1. Check your leave balance  \n2. Salary Issues  \n3. Harrasment Cases  \n4. Resignation Request"
+  - text: " I have following services  \n1. Check your leave balance  \n2. Salary Issues  \n3. Harrasment Cases  \n4. Resignation Request"
+  - text: " you can check leave balances or file any issue in respective fields  \n1. Salary Issue  \n2. Harrasment case  \n3. Resignation Request"
+
+
+  
 
   utter_cheer_up:
   - text: "Here is something to cheer you up:"
@@ -29,6 +60,8 @@ responses:
 
   utter_goodbye:
   - text: "Bye"
+  - text: Bye have a nice day
+  - text: Take care see you
 
   utter_iamabot:
   - text: "I am a bot, powered by Rasa."
@@ -116,6 +149,8 @@ actions:
 - validate_salary_issue
 - validate_harrasment
 - validate_resign
+- action_sollu
+- action_takeup
 
 forms:
   salary_issue:

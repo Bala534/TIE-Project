@@ -110,7 +110,9 @@ slots:
   SALARY_ISSUE:
     type: text
     influence_conversation: true
-
+  latest:
+    type: text
+    influence_conversation: true
   ISSUE_DISCRIPTION:
     type: text
     influence_conversation: true

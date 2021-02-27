@@ -87,7 +87,7 @@ class ActionLogin(FormValidationAction):
             d = {}
             d['id'] = id
             d['password'] = password
-            d['authenticate']=1
+            d['authenticate'] = 1
             dispatcher.utter_message(text="YOU HAVE LOGGED IN SUCCESSFULLY")
             return d
         else:
@@ -111,13 +111,14 @@ class ActionSalaryIssue(FormValidationAction):
         tracker: Tracker,
         domain: DomainDict,) -> Dict[Text, Any]:
         # print(1)
-        global latest
+        # global latest
         authenticate = tracker.get_slot("authenticate")
         if authenticate is None:
             print("sending to authenticate")
             latest = "salary_issue"
             dispatcher.utter_message(text = f"you have not logged in. Please login and try again", buttons = ButtonsFactory.createButtons(list_of_possibles = ["Login"], intent = "greet", slot_name = "dummy"))
-            return [FollowupAction("greet")]
+            d = {"latest" : latest}
+            return d
         else:
             id = tracker.get_slot("id")
             issue = tracker.get_slot("SALARY_ISSUE")
@@ -129,7 +130,7 @@ class ActionSalaryIssue(FormValidationAction):
             
             dispatcher.utter_message(text=f"{response.text}")
             print(issue)
-        return [SlotSet("latest","action_leave_balance")]
+        return []
 
 
 ##############################################################################################################################
@@ -144,9 +145,9 @@ class ActionHarrasment(FormValidationAction):
         dispatcher: CollectingDispatcher,
         tracker: Tracker,
         domain: DomainDict,) -> Dict[Text, Any]:
-        global latest
+        # global latest
         latest = "harrasment"
-        d = {"NAME_ACCUSED": slot_value}
+        d = {"latest" : latest}
         return d
 
     def validate_ISSUE_DISCRIPTION(self,
@@ -173,7 +174,7 @@ class ActionHarrasment(FormValidationAction):
             response = requests.post(url = url+"harassment", params = data)
                 
             dispatcher.utter_message(text=f"{response.text}")
-        return [SlotSet("latest","action_leave_balance")]
+        return [SlotSet("latest","harrasment")]
 
 
 
@@ -190,9 +191,10 @@ class ActionResignation(FormValidationAction):
         dispatcher: CollectingDispatcher,
         tracker: Tracker,
         domain: DomainDict,) -> Dict[Text, Any]:
-        global latest
+        # global latest
         latest = "resign"
-        return [SlotSet("latest","action_leave_balance")]
+        d = {"latest" : latest}
+        return d
 
     def validate_IS_THERE_ANYTHING_WE_CAN_SO_THAT_YOU_STAY(self,
         slot_value: Any,

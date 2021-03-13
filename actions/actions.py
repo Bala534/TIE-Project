@@ -18,7 +18,7 @@ import requests
 
 
 
-url = "https://3e80363e678f.ngrok.io/"    #Don't forget to add / after io 
+url = "https://de3d551937da.ngrok.io/"    #Don't forget to add / after io 
 # latest = None
 
 
@@ -47,7 +47,7 @@ class ActionLeaveBalance(Action):
         authenticate = tracker.get_slot("authenticate")
         if authenticate is None:
             # latest = "action_leave_balance"
-            dispatcher.utter_message(text = f"you have not logged in. Please login and try again", buttons = ButtonsFactory.createButtons(list_of_possibles = ['Login'], intent = "greet", slot_name = "dummy"))
+            dispatcher.utter_message(text = f"You have not logged in. Please login and try again", buttons = ButtonsFactory.createButtons(list_of_possibles = ['Login'], intent = "greet", slot_name = "dummy"))
         else:
             id = tracker.get_slot("id")
             data = {"id": int(id)}
@@ -252,3 +252,174 @@ class ActionTakeUp(Action):
         if  latest is not  None:
             print("lstest issue", latest)
             return [FollowupAction(latest)]
+
+
+#########################################################################################
+class ActionPayslip(Action):
+
+    def name(self) -> Text:
+        return "action_payslip"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        authenticate = tracker.get_slot("authenticate")
+        if authenticate is None:
+            # latest = "action_leave_balance"
+            dispatcher.utter_message(text = f"You have not logged in. Please login and try again", buttons = ButtonsFactory.createButtons(list_of_possibles = ['Login'], intent = "greet", slot_name = "dummy"))
+        else:
+            id = tracker.get_slot("id")
+            data = {"id": int(id)}
+            with open("data.json", "w") as f:
+                json.dump(data, f)
+            response = requests.post(url = url+"payslip", params = data)
+            dispatcher.utter_message(text=f"{response.text}")
+        return [SlotSet("latest","action_payslip")]
+
+###############################################################################################
+
+
+
+
+class FormOnSite(FormValidationAction):
+
+    def name(self) -> Text:
+        return "validate_onsite"
+    
+    def validate_project(self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,) -> Dict[Text, Any]:
+        latest = "onsite"
+        d = {"latest" : latest}
+        return d
+    
+    def validate_total_expenses(self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,) -> Dict[Text, Any]:
+        authenticate = tracker.get_slot("authenticate")
+        if authenticate is None:
+            dispatcher.utter_message(text = f"you have not logged in. Please login and try again", buttons = ButtonsFactory.createButtons(list_of_possibles = ["Login"], intent = "greet", slot_name = "dummy"))
+        else:
+            data = {
+                "id" : int(id),
+                "project" : tracker.get_slot("project"),
+                "date_travel" : tracker.get_slot("date_travel"),
+                "total_expenses"  : tracker.get_slot("total_expenses")
+            }
+            with open("data.json", "w") as f:
+                    json.dump(data, f)
+            response = requests.post(url = url+"reimbursment", params = data)
+                
+            dispatcher.utter_message(text=f"{response.text}")
+
+
+############################################################################
+
+
+class FormBCP(FormValidationAction):
+
+    def name(self) -> Text:
+        return "validate_bcp"
+    
+    def validate_project(self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,) -> Dict[Text, Any]:
+        latest = "onsite"
+        d = {"latest" : latest}
+        return d
+    
+    def validate_total_expenses(self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,) -> Dict[Text, Any]:
+        authenticate = tracker.get_slot("authenticate")
+        if authenticate is None:
+            dispatcher.utter_message(text = f"you have not logged in. Please login and try again", buttons = ButtonsFactory.createButtons(list_of_possibles = ["Login"], intent = "greet", slot_name = "dummy"))
+        else:
+            data = {
+                "id" : int(id),
+                "project" : tracker.get_slot("project"),
+                "total_expenses" : tracker.get_slot("total_expenses")
+            }
+            with open("data.json", "w") as f:
+                    json.dump(data, f)
+            response = requests.post(url = url+"reimbursment", params = data)
+                
+            dispatcher.utter_message(text=f"{response.text}")
+
+
+class Formtransfer(FormValidationAction):
+
+    def name(self) -> Text:
+        return "validate_transfer"
+    
+    def validate_project(self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,) -> Dict[Text, Any]:
+        latest = "transfer"
+        d = {"latest" : latest}
+        return d
+    
+    def validate_total_expenses(self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,) -> Dict[Text, Any]:
+        authenticate = tracker.get_slot("authenticate")
+        if authenticate is None:
+            dispatcher.utter_message(text = f"you have not logged in. Please login and try again", buttons = ButtonsFactory.createButtons(list_of_possibles = ["Login"], intent = "greet", slot_name = "dummy"))
+        else:
+            data = {
+                "id" : int(id),
+                "transfer_date": tracker.get_slot("transfer_date"),
+                "total_expenses": tracker.get_slot("total_expenses")
+            }
+            with open("data.json", "w") as f:
+                    json.dump(data, f)
+            response = requests.post(url = url+"reimbursment", params = data)
+                
+            dispatcher.utter_message(text=f"{response.text}")
+
+class Formother(FormValidationAction):
+
+    def name(self) -> Text:
+        return "validate_other"
+    
+    def validate_project(self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,) -> Dict[Text, Any]:
+        latest = "other"
+        d = {"latest" : latest}
+        return d
+    
+    def validate_total_expenses(self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,) -> Dict[Text, Any]:
+        authenticate = tracker.get_slot("authenticate")
+        if authenticate is None:
+            dispatcher.utter_message(text = f"you have not logged in. Please login and try again", buttons = ButtonsFactory.createButtons(list_of_possibles = ["Login"], intent = "greet", slot_name = "dummy"))
+        else:
+            data = {
+                "id" : int(id),
+                "purpose": tracker.get_slot("purpose"),
+                "project": tracker.get_slot("project"),
+                "total_expenses" : tracker.get_slot("total_expenses")
+            }
+            with open("data.json", "w") as f:
+                    json.dump(data, f)
+            response = requests.post(url = url+"reimbursment", params = data)
+                
+            dispatcher.utter_message(text=f"{response.text}")

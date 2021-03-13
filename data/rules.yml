@@ -98,3 +98,71 @@ rules:
   # The actions we want to run when the form is submitted.
   # - action: utter_login
   # - action: utter_slots_values
+
+- rule: Activate form for onsite
+  steps:
+  - intent: onsite
+  - action: onsite
+  - active_loop: onsite
+
+- rule: Submit form
+  condition:
+  # Condition that form is active.
+  - active_loop: onsite
+  steps:
+  # Form is deactivated
+  - action: onsite
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+
+- rule: Activate form for bcp
+  steps:
+  - intent: bcp
+  - action: bcp
+  - active_loop: bcp
+
+- rule: Submit form
+  condition:
+  # Condition that form is active.
+  - active_loop: bcp
+  steps:
+  # Form is deactivated
+  - action: bcp
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+
+- rule: Activate form for transfer
+  steps:
+  - intent: transfer
+  - action: transfer
+  - active_loop: transfer
+
+- rule: Submit form
+  condition:
+  # Condition that form is active.
+  - active_loop: transfer
+  steps:
+  # Form is deactivated
+  - action: transfer
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+
+- rule: Activate form for other
+  steps:
+  - intent: other
+  - action: other
+  - active_loop: other
+
+- rule: Submit form
+  condition:
+  # Condition that form is active.
+  - active_loop: other
+  steps:
+  # Form is deactivated
+  - action: other
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null

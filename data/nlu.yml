@@ -33,6 +33,8 @@ nlu:
     - 5n. what abt u
     - im 5n what abt u
     - gud . what abt u
+    - how are you
+    - hw r u
 
 - intent: nice2meet
   examples: |
@@ -187,4 +189,27 @@ nlu:
     - uncomfortable with company
     - want to leave comapany 
     
+- intent: payslip
+  examples: |
+    - fetch my payslip
+    - payslip
+    - pay slip
+    - my payslip
+    - payslip details
+    - show payslip
+    - display payslip
+    - provide payslip
+    - my slip
+
+- intent: reimbersment
+  examples: |
+    - apply reimbersment
+    - reimbersment
+    - want to apply reimbersment
+    - reimbersment claim
+    - i want reimbersment
+    - request reimbersment
+    - take reimbersment
+
+
 

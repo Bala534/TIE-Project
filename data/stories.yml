@@ -20,6 +20,16 @@ stories:
     - intent: goodbye
   - action: action_sollu
 
+- story: payslip
+  steps:
+  - intent: payslip
+  - action: action_payslip
+
+- story: reimbersment
+  steps:
+  - intent: reimbersment
+  - action: utter_reimbersment  
+
 #- story: salary issues
 #  steps:
 # - intent: salary_issue

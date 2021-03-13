@@ -17,6 +17,12 @@ intents:
   - harrasment
   - resign
   - nice2meet
+  - payslip
+  - reimbersment
+  - onsite
+  - bcp
+  - other
+  - transfer
 
 responses:
   utter_greet1:
@@ -75,6 +81,9 @@ responses:
   utter_harrasment:
   - text: "Your compliant has been filed. And quick action will be taken "
 
+  utter_payslip:
+  - text: "edoti"
+
   utter_resign:
   - text: "Your request has been sent . We will reach you as soon as possible"
   utter_submit:
@@ -102,9 +111,36 @@ responses:
   - text: "Enter your ID"
   utter_ask_password:
   - text: "Enter your password"
+
+  utter_ask_project:
+  - text: "Enter your project"
+
+  utter_ask_date_travel:
+  - text: "Enter your date of travel"
+
+  utter_ask_total_expenses:
+  - text: "Enter your total expenditure"
+
+  utter_ask_transfer_date:
+  - text: "Enter your transfer- travel date"
+
+  utter_ask_purpose:
+  - text: "Enter your purpose"
+
   utter_restart:
   - text: sessioning
 
+  utter_reimbersment:
+  - text: Select one of the Reiumbersment methods
+    buttons:
+    - title: "On Site"
+      payload: '/onsite{"dummy":"1"}'
+    - title: "BCP"
+      payload: '/bcp{"dummy":"1"}'
+    - title: "Transfer Tarvel"
+      payload: '/transfer{"dummy":"1"}'
+    - title: "Others"
+      payload: '/other{"dummy":"1"}'
 
 slots:
   SALARY_ISSUE:
@@ -142,6 +178,25 @@ slots:
     type: text
     influence_conversation: true
 
+  project:
+    type: text
+    influence_conversation: true
+
+  date_travel:
+    type: text
+    influence_conversation: true
+
+  total_expenses:
+    type: text
+    influence_conversation: true
+
+  transfer_date:
+    type: text
+    influence_conversation: true
+
+  purpose:
+    type: text
+    influence_conversation: true
   
 actions:
 - action_leave_balance
@@ -153,6 +208,11 @@ actions:
 - validate_resign
 - action_sollu
 - action_takeup
+- action_payslip
+- validate_onsite
+- validate_bcp
+- validate_transfer
+- validate_other
 
 forms:
   salary_issue:
@@ -172,6 +232,36 @@ forms:
     - type: from_text
     IS_THERE_ANYTHING_WE_CAN_SO_THAT_YOU_STAY:
     - type: from_text
+
+  onsite:
+    project:
+    - type: from_text
+    date_travel:
+    - type: from_text
+    total_expenses:
+    - type: from_text
+
+  bcp:
+    project:
+    - type: from_text
+    total_expenses:
+    - type: from_text
+
+  transfer:
+    transfer_date:
+    - type: from_text
+    total_expenses:
+    - type: from_text
+
+  other:
+    purpose:
+    - type: from_text
+    project:
+    - type: from_text
+    total_expenses:
+    - type: from_text
+
+
   
   greet:
     id:

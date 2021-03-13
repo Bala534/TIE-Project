@@ -112,6 +112,79 @@ app.post("/resignation",function(req,res){
 	})	
 })
 
+/*app.get("/payslip",function(req,res){
+	res.sendFile(path.join(__dirname, 'resignation.json'));
+})*/
+app.post("/payslip",function(req,res){
+	var mongojs=require("mongojs");
+	var cs="mongodb+srv://mahesh:mahesh@cluster0.qe4fh.mongodb.net/Tie?retryWrites=true&w=majority"
+	var db=mongojs(cs,["payslip"])
+	var d={
+		id:parseInt(req.query.id),
+	}
+    db.payslip.find(d,function(err,docs){
+		if(docs.length==0){
+			res.send("please check your id and password");
+		}
+		else{
+			res.send("Basic Salary: "+docs[0].basicsalary+''+"\n"+"Bonus: "+docs[0].bonus+''+"\n"+"HRA: "+docs[0].hra+''+"\n"+"DA: "+docs[0].da+'');
+		}	
+	})	
+})
+
+app.post("/reimbursment",function(req,res){
+	var mongojs=require("mongojs");
+	var cs="mongodb+srv://mahesh:mahesh@cluster0.qe4fh.mongodb.net/Tie?retryWrites=true&w=majority"
+	var db=mongojs(cs,["reimbursment"])
+	var on = {
+		project:req.query.project,
+		date_travel:req.query.date_travel,
+		total_expenses:req.query.total_expenses
+	}
+	var bc = {
+		project:req.query.project,
+		total_expenses:req.query.total_expenses
+	}
+	var transfer = {
+		transfer_date:req.query.transfer_date,
+		total_expenses:req.query.total_expenses
+	}
+	var othe = {
+		purpose:req.query.purpose,
+		project:req.query.project,
+		total_expenses:req.query.total_expenses
+	}
+	var d={
+		id:parseInt(req.query.id),
+		onsite:on,
+		bcp:bc,
+		transfertravel:transfer,
+		other:othe
+	}
+	var d1={};
+	d1["id"] = d["id"];
+	if(!(d['onsite']===undefined)){
+		d1["onsite"] = d["onsite"];
+	}
+	if(!(d['bcp']===undefined)){
+		d1["bcp"] = d["bcp"];
+	}
+	if(!(d['transfertravel']===undefined)){
+		d1["transfertravel"] = d["transfertravel"];
+	}
+	if(!(d['other']===undefined)){
+		d1["other"] = d["other"];
+	}
+    db.reimbursment.insert(d1,function(err,docs){
+		if(docs.length==0){
+			res.send("please check your id and password");
+		}
+		else{
+			res.send("ok");
+		}	
+	})	
+})
+
 app.listen(process.env.PORT || 4000, function(){
     console.log('Your node js server is running');
 });
